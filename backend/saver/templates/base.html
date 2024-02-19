@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+    <!-- pybo CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRb9Uzj8VfUZJ5kCsvwHAeL/ZsN1Cq3ZzcPuHtT/6b4Zw6l9a69ps8wwxa1w+1T" crossorigin="anonymous"></script>
+</head>
+
+
+<style>
+    body {
+        font-family: Arial;
+        background-color: #f3efc3;
+    }
+
+    .tab {
+      overflow: hidden;
+      border: 1px solid #ccc;
+      background-color: #f1f1f1;
+    }
+
+    .tab button {
+      background-color: inherit;
+      float: left;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 14px 16px;
+      transition: 0.3s;
+      font-size: 17px;
+    }
+
+    .tab button:hover {
+      background-color: #ddd;
+    }
+
+    .tab button.active {
+      background-color: #ccc;
+    }
+
+    .tabcontent {
+      display: none;
+      padding: 6px 12px;
+      border-top: none;
+    }
+
+    .wrap {
+        position: relative;
+        display: inline-block;
+    }
+    .wrap textarea {
+        resize: none;
+        min-height: 8.6em;
+        line-height:1.6em;
+        max-height: 9em;
+    }
+    .wrap span {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+    }
+    #counter {
+      padding: 0 .5em 0 .5em;
+      font-size: 0.75em;
+    }
+
+</style>
+
+<script>
+    function openCity(evt, cityName) {
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+      document.getElementById(cityName).style.display = "block";
+      evt.currentTarget.className += " active";
+    }
+
+    $(document).on("keyup", "#text", function(e) 
+    {
+        var text = $(this).val();
+        $(this).height(((text.split('\n').length + 1) * 1.5) + 'em');
+        $('#counter').html(text.length + '/500');
+    });
+
+    function TextSave()
+    {
+        var wrtext = $('#wrtext').val();
+        var wrpassword = $('#wrpassword').val();
+        var wrdelete_at = $('input[name="wrdelete_at"]:checked').val();
+
+        $.ajax({
+            url: '/write/',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({'wrtext' : wrtext, 'wrpassword' : wrpassword, 'wrdelete_at' : wrdelete_at}),
+            success: function(response) {
+                $('#post_result').append('<p>Success!!! Load Code : <a href="#" onclick="window.navigator.clipboard.writeText(\'' + response.message + '\').then(() => {alert(\'복사되었습니다!!\');}); return false;">' + response.message + '</a></p>');
+            },
+
+            error: function(error) {
+                alert(2);
+                console.log(error);
+            }
+        });
+    }
+
+    function TextLoad()
+    {
+        var ldcode = $('#ldcode').val();
+        var ldpassword = $('#ldpassword').val();
+        $.ajax({
+            url: '/load/',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({'ldcode' : ldcode, 'ldpassword' : ldpassword}),
+            success: function(response) {
+                if(response.status == 'error')
+                {
+                    alert(response.message)
+                }
+                else if(response.status == 'success')
+                {
+                    $('#ldtext').html(response.message);
+                }
+            },
+            error: function(error) {
+                alert(2);
+                console.log(error);
+            }
+        });
+    }
+
+    function Reset()
+    {
+        $('#text').val('');
+        $('#counter').html('0/500');
+    }
+</script>
+
+<body>
+    <div class="tab">
+      <button class="tablinks" onclick="openCity(event, 'Save')">Save</button>
+      <button class="tablinks" onclick="openCity(event, 'Load')">Load</button>
+    </div>
+
+    <div id="Save" class="tabcontent">
+        <div style="width:300px;" class="wrap">
+            {{ form1.wrtext(rows=9, cols=75, id='wrtext', class='form-control') }}
+            <span id="wrcounter" class="text-muted">0/500</span>
+        </div>
+        {% for subfield in form1.wrdelete_at %}
+            <div class="form-check">
+                {{ subfield(class="form-check-input") }}
+                {{ subfield.label(class="form-check-label") }}
+            </div>
+        {% endfor %}
+        <div id="post_result"></div>
+        <div class=form-group style="width:300px;">
+        {{ form1.wrpassword(id="wrpassword", minlength=4, maxlength=13, placeholder="password(null or 4~13)", class="form-control") }}
+            <button class="btn btn-primary" onclick="TextSave()">save</button>
+            <button class="btn btn-secondary" onclick="Reset()">reset</button>
+        </div>
+    </div>
+
+    <div id="Load" class="tabcontent">
+        <button onclick="TextLoad()">load</button>
+        <br>
+        <div style="width:300px;" class="wrap">
+            {{ form2.ldcode(placeholder='code(4)', id='ldcode' , class="form-control")}}
+            {{ form2.ldpassword(placeholder='password(null or 4~13)', id='ldpassword' , class="form-control")}}
+            <textarea rows="6" cols="50" id="ldtext" class="form-control"></textarea>
+            <span id="counter" class="text-muted">0/500</span>
+        </div>
+    </div>
+
+</body>
+</html>

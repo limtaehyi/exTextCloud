@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ko" style="width:600px; height:400px;">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="static/bootstrap.min.css">
+    <script src="static/jquery.min.js"></script>
+    <script src="static/bootstrap.bundle.min.js"></script>
+    <script src="popup.js"></script>
+</head>
+
+
+<style>
+    body {
+        font-family: Arial;
+        background-color: #f3efc3;
+    }
+
+    .tab {
+      overflow: hidden;
+      border: 1px solid #ccc;
+      background-color: #f1f1f1;
+    }
+
+    .tab button {
+      background-color: inherit;
+      float: left;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 14px 16px;
+      transition: 0.3s;
+      font-size: 17px;
+    }
+
+    .tab button:hover {
+      background-color: #ddd;
+    }
+
+    .tab button.active {
+      background-color: #ccc;
+    }
+
+    .tabcontent {
+      display: none;
+      padding: 6px 12px;
+      
+      border-top: none;
+    }
+
+    .wwrap, .lwrap {
+        position: relative;
+        display: inline-block;
+    }
+    .wwrap textarea, .lwrap textarea {
+        resize: none;
+        min-width: 300px;
+        width: 570px;
+        max-width: 600px;
+        min-height: 18.6em;
+        line-height:1.6em;
+        max-height: 19em;
+    }
+    .wwrap span, .lwrap span {
+        position: absolute;
+        bottom: 5px;
+        right: -250px;
+    }
+    #wrcounter, #ldcounter {
+      padding: 0 .5em 0 .5em;
+      font-size: 0.75em;
+    }
+
+</style>
+
+
+<body>
+  <div class="tab">
+    <button class="tablinks" id="saveTab">Save</button>
+    <button class="tablinks" id="loadTab">Load</button>
+    <button class="notwork" id="notwork">+</button>
+  </div>
+
+  <div id="Save" class="tabcontent">
+    <div style="width:300px;" class="wwrap">
+      <textarea rows="9" cols="150" id="wrtext" class="form-control"></textarea>
+      <span id="wrcounter" class="text-muted">0/500</span>
+    </div>
+
+    <div class="form-check">
+      <input type='radio' name="wrdelete_at" class="form-check-label" value="10min" checked>10min</label>
+      <input type='radio' name="wrdelete_at" class="form-check-label" value="1h">1h</label>
+      <input type='radio' name="wrdelete_at" class="form-check-label" value="3h">3h</label>
+    </div>
+    <div id="post_result"></div>
+    <div class=form-group style="width:300px;">
+      <input type="password" id="wrpassword" minlength="4" maxlength="13" placeholder="password(null or 4~13)" class="form-control">
+      <button class="btn btn-primary" id="saveText">save</button>
+      <button class="btn btn-secondary" id="resetText">reset</button>
+    </div>
+  </div>
+
+  <div id="Load" class="tabcontent">
+    <div style="width:300px;" class="lwrap">
+      <textarea rows="9" cols="75" id="ldtext" class="form-control"></textarea>
+      <span id="ldcounter" class="text-muted">0/500</span>
+    </div>
+
+      <div class="form-check" style="display: flex; justify-content: space-between;">
+        <button class="btn btn-primary" id="loadText">load</button>
+        <input type="text" placeholder="code(4)" id="ldcode" class="form-control">
+        <input type="password" placeholder="password(null or 4~13)" id="ldpassword" class="form-control">
+      </div>
+  </div>
+
+  <div id="noID" class="tabcontent">
+    <p>기능 준비중...(리펙토링해야함)</p>
+  </div>
+
+</body>
+
+</html>
