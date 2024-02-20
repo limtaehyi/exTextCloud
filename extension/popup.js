@@ -15,14 +15,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	{
 	    var text = $(this).val();
 	    $(this).height(((text.split('\n').length + 1) * 1.5) + 'em');
-	    $('#wrcounter').html(text.length + '/500');
+	    $('#wrcounter').html(text.length + '/3000');
 	});
 
 	$(document).on("keyup", "#ldtext", function(e) 
 	{
 	    var text = $(this).val();
 	    $(this).height(((text.split('\n').length + 1) * 1.5) + 'em');
-	    $('#ldcounter').html(text.length + '/500');
+	    $('#ldcounter').html(text.length + '/3000');
 	});
 });
 
@@ -57,15 +57,21 @@ function TextSave()
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({'wrtext' : wrtext, 'wrpassword' : wrpassword, 'wrdelete_at' : wrdelete_at}),
         success: function(response) {
-            $('#post_result').append('<p>Success!!! Load Code : <a href="#" onclick="window.navigator.clipboard.writeText(\'' + response.message + '\').then(() => {alert(\'복사되었습니다!!\');}); return false;">' + response.message + '</a></p>');
+            var copyText = $('<p>', { text: 'Success!!! Load Code : ' + response.message });
+            copyText.click(function() {
+                window.navigator.clipboard.writeText(response.message).then(function() {
+                    alert('복사되었습니다!!');
+                });
+            });
+            $('#post_result').append(copyText);
         },
 
         error: function(error) {
-            alert(2);
             console.log(error);
         }
     });
 }
+
 
 function TextLoad()
 {
@@ -97,5 +103,5 @@ function TextLoad()
 function Reset()
 {
     $('#wrtext').val('');
-    $('#wrcounter').html('0/500');
+    $('#wrcounter').html('0/3000');
 }

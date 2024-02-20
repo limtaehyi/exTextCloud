@@ -56,7 +56,7 @@
     .wwrap textarea, .lwrap textarea {
         resize: none;
         min-width: 300px;
-        width: 570px;
+        width: 575px;
         max-width: 600px;
         min-height: 18.6em;
         line-height:1.6em;
@@ -72,6 +72,24 @@
       font-size: 0.75em;
     }
 
+    #wrinputs {
+      padding-left: 0px;
+    }
+
+    #ldinputs, #ldbutton {
+      padding-left: 0px;
+      width:75%;
+    }
+
+    #wrbutton, #ldbutton {
+      margin-top: 7px;
+      margin-bottom: 5px;
+    }
+
+    #wrpasswordd {
+      width:75%;
+    }
+
 </style>
 
 
@@ -84,34 +102,42 @@
 
   <div id="Save" class="tabcontent">
     <div style="width:300px;" class="wwrap">
-      <textarea rows="9" cols="150" id="wrtext" class="form-control"></textarea>
-      <span id="wrcounter" class="text-muted">0/500</span>
+      <textarea rows="9" cols="150" id="wrtext" class="form-control" maxlength="3000"></textarea>
+      <span id="wrcounter" class="text-muted">0/3000</span>
     </div>
 
-    <div class="form-check">
-      <input type='radio' name="wrdelete_at" class="form-check-label" value="10min" checked>10min</label>
-      <input type='radio' name="wrdelete_at" class="form-check-label" value="1h">1h</label>
-      <input type='radio' name="wrdelete_at" class="form-check-label" value="3h">3h</label>
+    <div class="form-check" style="display: flex; justify-content: space-between;" id="wrinputs">
+      <div style="width: 50%;">
+        <input type='radio' name="wrdelete_at" class="form-check-label" value="10min" checked>10min</label>
+        <input type='radio' name="wrdelete_at" class="form-check-label" value="1h">1h</label>
+        <input type='radio' name="wrdelete_at" class="form-check-label" value="3h">3h</label>
+      </div>
+      <div style="width: 50%; text-align: right;" id="wrpasswordd">
+        <input type="password" id="wrpassword" minlength="4" maxlength="13" placeholder="password(null or 4~13)" class="form-control" >
+      </div>
     </div>
+    
     <div id="post_result"></div>
-    <div class=form-group style="width:300px;">
-      <input type="password" id="wrpassword" minlength="4" maxlength="13" placeholder="password(null or 4~13)" class="form-control">
+    <div class=form-group style="width:300px;" id="wrbutton">
       <button class="btn btn-primary" id="saveText">save</button>
       <button class="btn btn-secondary" id="resetText">reset</button>
     </div>
   </div>
 
+
   <div id="Load" class="tabcontent">
     <div style="width:300px;" class="lwrap">
-      <textarea rows="9" cols="75" id="ldtext" class="form-control"></textarea>
-      <span id="ldcounter" class="text-muted">0/500</span>
+      <textarea rows="9" cols="75" id="ldtext" class="form-control" maxlength="3000"></textarea>
+      <span id="ldcounter" class="text-muted">0/3000</span>
     </div>
 
-      <div class="form-check" style="display: flex; justify-content: space-between;">
-        <button class="btn btn-primary" id="loadText">load</button>
-        <input type="text" placeholder="code(4)" id="ldcode" class="form-control">
-        <input type="password" placeholder="password(null or 4~13)" id="ldpassword" class="form-control">
-      </div>
+    <div class="form-check" style="display: flex; justify-content: space-between;" id="ldinputs">
+      <input type="text" placeholder="code(4)" id="ldcode" class="form-control">
+      <input type="password" placeholder="password(null or 4~13)" id="ldpassword" class="form-control">
+    </div>
+    <div class="form-check" style="display: flex; justify-content: flex-start;" id="ldbutton">
+      <button class="btn btn-primary" id="loadText">load</button>
+    </div>
   </div>
 
   <div id="noID" class="tabcontent">
