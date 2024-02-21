@@ -24,6 +24,38 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	    $(this).height(((text.split('\n').length + 1) * 1.5) + 'em');
 	    $('#ldcounter').html(text.length + '/3000');
 	});
+
+    window.addEventListener('blur', function() {
+        var state = {
+            wrtext: $('#wrtext').val(),
+            wrpassword: $('#wrpassword').val(),
+            wrdelete_at: $('input[name="wrdelete_at"]:checked').val(),
+            ldcode: $('#ldcode').val(),
+            ldpassword: $('#ldpassword').val(),
+            ldtext: $('#ldtext').val(),
+            activeTab: $('.tablinks.active').attr('id')
+        };
+        localStorage.setItem('state', JSON.stringify(state));
+    });
+
+    window.addEventListener('focus', function() 
+    {
+        var state = JSON.parse(localStorage.getItem('state'));
+        if (state) 
+        {
+            $('#wrtext').val(state.wrtext);
+            $('#wrpassword').val(state.wrpassword);
+            $('input[name="wrdelete_at"]').val(state.wrdelete_at);
+            $('#ldcode').val(state.ldcode);
+            $('#ldpassword').val(state.ldpassword);
+            $('#ldtext').val(state.ldtext);
+            
+            if (state.activeTab) 
+            {
+                document.getElementById(state.activeTab).click();
+            }
+        }
+    });
 });
 
 function openCity(evt, cityName) 
