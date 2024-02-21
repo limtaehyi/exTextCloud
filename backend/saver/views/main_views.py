@@ -4,6 +4,7 @@ from flask import Blueprint, render_template, request, url_for, g, flash, jsonif
 
 from sqlalchemy import func
 from werkzeug.utils import redirect
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from .. import db
 from ..forms import WriteText, LoadText
@@ -37,7 +38,7 @@ def write():
     db.session.delete(randomrow)
 
     if form.wrpassword.data:
-        query = TextTable(code=randomrow.codes, text=form.wrtext.data, password=form.wrpassword.data, created_on=datetime.now(), delete_at=deltime)
+        query = TextTable(code=randomrow.codes, text=form.wrtext.data, password=generate_password_hash(form.wrpassword.data), created_on=datetime.now(), delete_at=deltime)
     else:
         query = TextTable(code=randomrow.codes, text=form.wrtext.data, created_on=datetime.now(), delete_at=deltime)
 
@@ -52,11 +53,12 @@ def load():
     data = request.get_json()
 
     ischeck = TextTable.query.filter_by(code=form.ldcode.data).first()
+
     if ischeck:
         if ischeck.password == '':
             return jsonify({'status': 'success','message': ischeck.text})
         else:
-            if ischeck.password == form.ldpassword.data:
+            if check_password_hash(ischeck.password, form.ldpassword.data):
                 return jsonify({'status': 'success','message': ischeck.text})
             else:
                 return jsonify({'status': 'error','message': 'pw not match'})
