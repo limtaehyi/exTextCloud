@@ -37,6 +37,7 @@ def write():
     randomrow = CodeTable.query.order_by(func.random()).first()
     db.session.delete(randomrow)
 
+
     if form.wrpassword.data:
         query = TextTable(code=randomrow.codes, text=form.wrtext.data, password=generate_password_hash(form.wrpassword.data), created_on=datetime.now(), delete_at=deltime)
     else:
@@ -55,7 +56,7 @@ def load():
     ischeck = TextTable.query.filter_by(code=form.ldcode.data).first()
 
     if ischeck:
-        if ischeck.password == '':
+        if ischeck.password == None:
             return jsonify({'status': 'success','message': ischeck.text})
         else:
             if check_password_hash(ischeck.password, form.ldpassword.data):

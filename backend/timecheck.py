@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine, text, Table, MetaData
 from sqlalchemy.orm import sessionmaker
+from datetime import datetime
 import schedule
 import threading
 import time
@@ -20,14 +21,13 @@ code_table = Table('code_table', metadata, autoload_with=engine)
 
 def job():
     logging.info('Running scheduled job.')
+    nowt = datetime.now()
+    print(nowt)
     with session.begin():
-        # 지난 1분 이전의 행을 가져옵니다.
-        rows = session.query(text_table).filter(text('datetime(delete_at) < datetime("now")')).all()
+        filter_condition = text("datetime(delete_at) < :nowt").bindparams(nowt=nowt.strftime('%Y-%m-%d %H:%M:%S'))
+        rows = session.query(text_table).filter(filter_condition).all()
+        session.query(text_table).filter(filter_condition).delete()
 
-        # 지난 1분 이전의 행을 삭제합니다.
-        session.query(text_table).filter(text('datetime(delete_at) < datetime("now")')).delete()
-
-        # 삭제된 코드를 code_table에 삽입합니다.
         for row in rows:
             insert = code_table.insert().values(codes=row.code)
             session.execute(insert)
@@ -43,4 +43,3 @@ schedule.every(1).minutes.do(job)  # 매 분마다 실행
 
 background_thread = threading.Thread(target=run_schedule)
 background_thread.start()
-
