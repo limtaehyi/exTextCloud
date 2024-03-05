@@ -1,7 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "TextCloud",
+  "name": "exTextCloud",
   "version": "1.0",
+  "description": "비로그인 텍스트 저장 클라우드",
   "background" : {
     "service_worker" : "background.js"
   },
@@ -14,15 +15,31 @@
       "run_at": "document_end"
     }
   ],
+
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon":{
+      "32":"img/cloud32.png",
+      "48":"img/cloud48.png",
+      "64":"img/cloud64.png",
+      "96":"img/cloud32.png"
+    }
   },
+
+  "icons":{
+    "32":"img/cloud32.png",
+    "48":"img/cloud48.png",
+    "64":"img/cloud64.png",
+    "96":"img/cloud32.png"
+  },
+
   "permissions": [
     "activeTab",
     "clipboardWrite"
   ],
   
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'"
+    "extension_pages": "script-src 'self'; object-src 'self'",
+    "content_scripts": "script-src 'self'; object-src 'self'"
   }
 }

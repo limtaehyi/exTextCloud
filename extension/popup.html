@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="static/bootstrap.min.css">
     <script src="static/jquery.min.js"></script>
     <script src="static/bootstrap.bundle.min.js"></script>
+    <!--<script src="static/jquery-ui.js"></script>
+    <script src="static/jquery-ui.css"></script>-->
     <script src="popup.js"></script>
 </head>
 
@@ -14,7 +16,7 @@
 <style>
     body {
         font-family: Arial;
-        background-color: #f3efc3;
+        background-color: #9dd6fff7;
     }
 
     .tab {
@@ -53,7 +55,7 @@
         position: relative;
         display: inline-block;
     }
-    .wwrap textarea, .lwrap textarea {
+    .wwrap textarea, .lwrap textarea{
         resize: none;
         min-width: 300px;
         width: 575px;
@@ -62,11 +64,29 @@
         line-height:1.6em;
         max-height: 19em;
     }
-    .wwrap span, .lwrap span {
+
+    [id^="newtext"]{
+        resize: none;
+        min-width: 300px;
+        width: 575px;
+        max-width: 600px;
+        min-height: 18.6em;
+        line-height:1.6em;
+        max-height: 19em;
+    }
+
+    .wwrap span, .lwrap span{
         position: absolute;
         bottom: 5px;
         right: -250px;
     }
+
+    [id^="newcounter"] span {
+        position: absolute;
+        bottom: 5px;
+        right: -250px;
+    }
+
     #wrcounter, #ldcounter {
       padding: 0 .5em 0 .5em;
       font-size: 0.75em;
@@ -97,12 +117,12 @@
   <div class="tab">
     <button class="tablinks" id="saveTab">Save</button>
     <button class="tablinks" id="loadTab">Load</button>
-    <button class="notwork" id="notwork">+</button>
   </div>
 
-  <div id="Save" class="tabcontent">
+<div id="contents">
+  <div id="Savetab" class="tabcontent">
     <div style="width:300px;" class="wwrap">
-      <textarea rows="9" cols="150" id="wrtext" class="form-control" maxlength="3000"></textarea>
+      <textarea rows="9" cols="150" id="wrtext" class="form-control" minlength="7" maxlength="3000" ></textarea>
       <span id="wrcounter" class="text-muted">0/3000</span>
     </div>
 
@@ -119,30 +139,28 @@
     
     <div id="post_result"></div>
     <div class=form-group style="width:300px;" id="wrbutton">
-      <button class="btn btn-primary" id="saveText">save</button>
-      <button class="btn btn-secondary" id="resetText">reset</button>
+      <button class="btn btn-primary" id="saveText">Save</button>
+      <button class="btn btn-secondary" id="resetText">Reset</button>
     </div>
   </div>
 
 
-  <div id="Load" class="tabcontent">
+  <div id="Loadtab" class="tabcontent">
     <div style="width:300px;" class="lwrap">
       <textarea rows="9" cols="75" id="ldtext" class="form-control" maxlength="3000"></textarea>
       <span id="ldcounter" class="text-muted">0/3000</span>
     </div>
 
     <div class="form-check" style="display: flex; justify-content: space-between;" id="ldinputs">
-      <input type="text" placeholder="code(4)" id="ldcode" class="form-control">
-      <input type="password" placeholder="password(null or 4~13)" id="ldpassword" class="form-control">
+      <input type="text" placeholder="code(4)" id="ldcode" class="form-control" minlength="4" maxlength="4" style="width: 120px;">
+      <input type="password" placeholder="password(null or 4~13)" id="ldpassword" class="form-control" style="margin-left: 3px;">
     </div>
     <div class="form-check" style="display: flex; justify-content: flex-start;" id="ldbutton">
-      <button class="btn btn-primary" id="loadText">load</button>
+      <button class="btn btn-primary" id="loadText">Load</button>
+      <button class="btn btn-success" id="Newtab" style="margin-left:3px;">Newtab</button>
     </div>
   </div>
-
-  <div id="noID" class="tabcontent">
-    <p>기능 준비중...(리펙토링해야함)</p>
-  </div>
+</div>
 
 </body>
 

@@ -1,15 +1,27 @@
+var tabcounter = 1;
 document.addEventListener('DOMContentLoaded', (event) => {
+
 	document.getElementById('saveTab').addEventListener('click', function(event) {
-	  openCity(event, 'Save');
+	  openTab(event, 'Savetab');
 	});
 
 	document.getElementById('loadTab').addEventListener('click', function(event) {
-	  openCity(event, 'Load');
+	  openTab(event, 'Loadtab');
 	});
+
+    document.querySelectorAll('[id^="buttontab"]').forEach(function(element) {
+        element.addEventListener('click', function(event) {
+            var tabName = element.id.substring('buttontab'.length);
+            var appendname = "newtab"+tabName;
+            openTab(event, appendname);
+        });
+    });
+
 
 	document.getElementById('saveText').addEventListener('click', TextSave);
 	document.getElementById('resetText').addEventListener('click', Reset);
 	document.getElementById('loadText').addEventListener('click', TextLoad);
+    document.getElementById('Newtab').addEventListener('click', Newtab);
 
 	$(document).on("keyup", "#wrtext", function(e) 
 	{
@@ -28,10 +40,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     window.addEventListener('blur', function() {
         var state = {
             wrtext: $('#wrtext').val(),
-            wrpassword: $('#wrpassword').val(),
             wrdelete_at: $('input[name="wrdelete_at"]:checked').val(),
             ldcode: $('#ldcode').val(),
-            ldpassword: $('#ldpassword').val(),
             ldtext: $('#ldtext').val(),
             activeTab: $('.tablinks.active').attr('id')
         };
@@ -44,10 +54,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         if (state) 
         {
             $('#wrtext').val(state.wrtext);
-            $('#wrpassword').val(state.wrpassword);
             $('input[name="wrdelete_at"]').val(state.wrdelete_at);
             $('#ldcode').val(state.ldcode);
-            $('#ldpassword').val(state.ldpassword);
             $('#ldtext').val(state.ldtext);
             
             if (state.activeTab) 
@@ -58,7 +66,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 });
 
-function openCity(evt, cityName) 
+
+function openTab(evt, cityName)
 {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
@@ -82,26 +91,36 @@ function TextSave()
     var wrpassword = $('#wrpassword').val();
     var wrdelete_at = $('input[name="wrdelete_at"]:checked').val();
 
-    $.ajax({
-        url: 'http://127.0.0.1:5000/write/',
-        type: 'POST',
-        dataType: 'json',
-        contentType: 'application/json; charset=utf-8',
-        data: JSON.stringify({'wrtext' : wrtext, 'wrpassword' : wrpassword, 'wrdelete_at' : wrdelete_at}),
-        success: function(response) {
-            var copyText = $('<p>', { text: 'Success!!! Load Code : ' + response.message });
-            copyText.click(function() {
-                window.navigator.clipboard.writeText(response.message).then(function() {
-                    alert('복사되었습니다!!');
+    if (wrtext.length < 7)
+    {
+        alert("최소 7글자는 넣어야합니다.");
+        return;
+    }
+    else
+    {
+        $.ajax({
+            url: 'http://127.0.0.1:5000/write/',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({'wrtext' : wrtext, 'wrpassword' : wrpassword, 'wrdelete_at' : wrdelete_at}),
+            success: function(response) {
+                var copyText = $('<p style="width:135px;">', { text: 'Load Code : ' });
+                var messageText = $('<span>', { text: response.message, css: { color: 'blue', textDecoration: 'underline' } });
+                copyText.append(messageText);
+                copyText.click(function() {
+                    window.navigator.clipboard.writeText(response.message).then(function() {
+                        alert('복사되었습니다!!');
+                    });
                 });
-            });
-            $('#post_result').append(copyText);
-        },
+                $('#post_result').append(copyText);
+            },
 
-        error: function(error) {
-            console.log(error);
-        }
-    });
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
 }
 
 
@@ -122,7 +141,7 @@ function TextLoad()
             }
             else if(response.status == 'success')
             {
-                $('#ldtext').html(response.message);
+                $('#ldtext').val(response.message);
             }
         },
         error: function(error) {
@@ -136,4 +155,25 @@ function Reset()
 {
     $('#wrtext').val('');
     $('#wrcounter').html('0/3000');
+}
+
+function Newtab() 
+{
+    var ldcode = $('#ldcode').val();
+    var ldtext = $('#ldtext').val();
+
+    var newTabButton = $("<button class=\"tablinks\" id=\"buttontab"+tabcounter+"\">"+ldcode+"</button>");
+
+    newTabButton.on('click', function(event) {
+        var tabName = this.id.substring('buttontab'.length);
+        var appendname = "newtab" + tabName;
+        openTab(event, appendname);
+    });
+
+    $('.tab').append(newTabButton);
+
+    $('#contents').append("<div id=\"newtab"+tabcounter+"\" class=\"tabcontent\"><div style=\"width:300px;\" class=\"newwrap"+tabcounter+"\"><textarea rows=\"9\" cols=\"75\" id=\"newtext"+tabcounter+"\" class=\"form-control\" maxlength=\"3000\">"+ldtext+"</textarea><span id=\"newcounter"+tabcounter+"\" class=\"text-muted\">0/3000</span></div></div>");
+
+    alert("새 탭에 복사되었습니다.");
+    tabcounter = tabcounter + 1;
 }
