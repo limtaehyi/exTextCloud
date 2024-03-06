@@ -105,10 +105,10 @@ function TextSave()
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({'wrtext' : wrtext, 'wrpassword' : wrpassword, 'wrdelete_at' : wrdelete_at}),
             success: function(response) {
-                var copyText = $('<p style="width:135px;">', { text: 'Load Code : ' });
+                var copyText = $('<p>', { text: 'Load Code : ' });
                 var messageText = $('<span>', { text: response.message, css: { color: 'blue', textDecoration: 'underline' } });
                 copyText.append(messageText);
-                copyText.click(function() {
+                messageText.click(function() {
                     window.navigator.clipboard.writeText(response.message).then(function() {
                         alert('복사되었습니다!!');
                     });
