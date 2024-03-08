@@ -18,6 +18,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     });
 
+    $(document).on('click', '[id^="buttontab"]', function(event) {
+        var tabName = this.id.substring('buttontab'.length);
+        var appendname = "newtab" + tabName;
+        openTab(event, appendname);
+    });
+
 
 	document.getElementById('saveText').addEventListener('click', TextSave);
 	document.getElementById('resetText').addEventListener('click', Reset);
@@ -38,7 +44,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	    $('#ldcounter').html(text.length + '/3000');
 	});
 
-    window.addEventListener('blur', async function() {
+    window.addEventListener('blur', async function() 
+    {
         if(lastEvent !== 'blur')
         {
             var state = {
@@ -52,7 +59,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
             lastEvent = 'blur';
             window.dispatchEvent(new Event('focus'));
         }
-        
     });
 
     window.addEventListener('focus', function() 
@@ -184,6 +190,13 @@ function Reset()
 {
     $('#wrtext').val('');
     $('#wrcounter').html('0/3000');
+}
+
+function deletetab()
+{
+    var tabName = this.id.substring('buttontab'.length);
+    var delname = 'newtab'+tabName;
+    localStorage.removeItem(delname);
 }
 
 function Newtab() 
