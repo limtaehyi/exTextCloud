@@ -1,4 +1,5 @@
 var tabcounter = 1;
+let lastEvent = null;
 document.addEventListener('DOMContentLoaded', (event) => {
 
 	document.getElementById('saveTab').addEventListener('click', function(event) {
@@ -37,32 +38,60 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	    $('#ldcounter').html(text.length + '/3000');
 	});
 
-    window.addEventListener('blur', function() {
-        var state = {
-            wrtext: $('#wrtext').val(),
-            wrdelete_at: $('input[name="wrdelete_at"]:checked').val(),
-            ldcode: $('#ldcode').val(),
-            ldtext: $('#ldtext').val(),
-            activeTab: $('.tablinks.active').attr('id')
-        };
-        localStorage.setItem('state', JSON.stringify(state));
+    window.addEventListener('blur', async function() {
+        if(lastEvent !== 'blur')
+        {
+            var state = {
+                wrtext: $('#wrtext').val(),
+                wrdelete_at: $('input[name="wrdelete_at"]:checked').val(),
+                ldcode: $('#ldcode').val(),
+                ldtext: $('#ldtext').val(),
+                activeTab: $('.tablinks.active').attr('id')
+            };
+            localStorage.setItem('state', JSON.stringify(state));
+            lastEvent = 'blur';
+            window.dispatchEvent(new Event('focus'));
+        }
+        
     });
 
     window.addEventListener('focus', function() 
     {
-        var state = JSON.parse(localStorage.getItem('state'));
-        if (state) 
+        if(lastEvent !== 'focus')
         {
-            $('#wrtext').val(state.wrtext);
-            $('input[name="wrdelete_at"]').val(state.wrdelete_at);
-            $('#ldcode').val(state.ldcode);
-            $('#ldtext').val(state.ldtext);
-            
-            if (state.activeTab) 
-            {
-                document.getElementById(state.activeTab).click();
+            var state = JSON.parse(localStorage.getItem('state'));
+
+            var keys = Object.keys(localStorage); 
+            console.log(keys);
+            for(var i = 0; i < keys.length; i++) { 
+                var key = keys[i];
+                
+                if(key.startsWith('newtab')) { 
+                    var newTabData = JSON.parse(localStorage.getItem(key)); 
+                    var tabId = key.replace('newtab', '');
+                    
+                    $('.tab').append("<button class='tablinks' id='buttontab"+tabId+"'>" + newTabData.buttontab + "</button>");
+                    
+                    $('#contents').append("<div id='newtab" + tabId + "' class='tabcontent'><div style='width:300px;' class='newwrap" + tabId + "'><textarea rows='9' cols='75' id='newtext" + tabId + "' class='form-control' maxlength='3000'>" + newTabData.newtext + "</textarea><span id='newcounter" + tabId + "' class='text-muted'>0/3000</span></div></div>");
+                }
             }
+
+
+            if (state) 
+            {
+                $('#wrtext').val(state.wrtext);
+                $('input[name="wrdelete_at"]').val(state.wrdelete_at);
+                $('#ldcode').val(state.ldcode);
+                $('#ldtext').val(state.ldtext);
+
+                if (state.activeTab) 
+                {
+                    document.getElementById(state.activeTab).click();
+                }
+            }
+            lastEvent = 'focus';
         }
+
     });
 });
 
@@ -173,6 +202,12 @@ function Newtab()
     $('.tab').append(newTabButton);
 
     $('#contents').append("<div id=\"newtab"+tabcounter+"\" class=\"tabcontent\"><div style=\"width:300px;\" class=\"newwrap"+tabcounter+"\"><textarea rows=\"9\" cols=\"75\" id=\"newtext"+tabcounter+"\" class=\"form-control\" maxlength=\"3000\">"+ldtext+"</textarea><span id=\"newcounter"+tabcounter+"\" class=\"text-muted\">0/3000</span></div></div>");
+
+    var newtab = {
+            buttontab: ldcode,
+            newtext: ldtext,
+    };
+    localStorage.setItem('newtab'+tabcounter, JSON.stringify(newtab));
 
     alert("새 탭에 복사되었습니다.");
     tabcounter = tabcounter + 1;
