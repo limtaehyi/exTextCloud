@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	    $('#ldcounter').html(text.length + '/3000');
 	});
 
-    window.addEventListener('blur', async function() 
+    window.addEventListener('blur', function() 
     {
         if(lastEvent !== 'blur')
         {
@@ -57,7 +57,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
             };
             localStorage.setItem('state', JSON.stringify(state));
             lastEvent = 'blur';
-            window.dispatchEvent(new Event('focus'));
         }
     });
 
@@ -81,7 +80,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     $('#contents').append("<div id='newtab" + tabId + "' class='tabcontent'><div style='width:300px;' class='newwrap" + tabId + "'><textarea rows='9' cols='75' id='newtext" + tabId + "' class='form-control' maxlength='3000'>" + newTabData.newtext + "</textarea><span id='newcounter" + tabId + "' class='text-muted'>0/3000</span></div></div>");
                 }
             }
-
 
             if (state) 
             {

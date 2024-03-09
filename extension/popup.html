@@ -65,6 +65,14 @@
         max-height: 19em;
     }
 
+    .wwrap{
+      width:300px;
+    }
+
+    .lwrap{
+      width:300px;
+    }
+
     [id^="newtext"]{
         resize: none;
         min-width: 300px;
@@ -94,6 +102,13 @@
 
     #wrinputs {
       padding-left: 0px;
+      display: flex; 
+      justify-content: space-between;
+    }
+
+    #ldinputs{
+      display: flex; 
+      justify-content: space-between;
     }
 
     #ldinputs, #ldbutton {
@@ -106,8 +121,46 @@
       margin-bottom: 5px;
     }
 
-    #wrpasswordd {
+    #wrbutton{
+      width:300px;
+    }
+
+    #ldbutton{
+      display: flex; 
+      justify-content: flex-start;
+    }
+
+    #ldcode{
+      width: 120px;
+    }
+
+    #ldpassword{
+      margin-left: 3px;
+    }
+
+    #wrform {
       width:75%;
+      width: 50%; 
+      text-align: right;
+    }
+
+    #times{
+      width: 50%; 
+      text-align:right; 
+      margin-right:50px; 
+      margin-top:5px;
+    }
+
+    #Newtab {
+      margin-left:3px;
+    }
+
+    #footer{
+      position:fixed; 
+      right:10px;
+      bottom:0px;
+      color:gray;
+      z-index:10;
     }
 
 </style>
@@ -121,24 +174,25 @@
 
 <div id="contents">
   <div id="Savetab" class="tabcontent">
-    <div style="width:300px;" class="wwrap">
+    <div class="wwrap">
       <textarea rows="9" cols="150" id="wrtext" class="form-control" minlength="7" maxlength="3000" ></textarea>
       <span id="wrcounter" class="text-muted">0/3000</span>
     </div>
 
-    <div class="form-check" style="display: flex; justify-content: space-between;" id="wrinputs">
-      <div style="width: 50%;">
+    <div class="form-check" id="wrinputs">
+      <div id="wrform">
+        <input type="password" id="wrpassword" minlength="4" maxlength="13" placeholder="password(null or 4~13)" class="form-control" >
+      </div>
+      <div id="times">
         <input type='radio' name="wrdelete_at" class="form-check-label" value="10min" checked>10min</label>
         <input type='radio' name="wrdelete_at" class="form-check-label" value="1h">1h</label>
         <input type='radio' name="wrdelete_at" class="form-check-label" value="3h">3h</label>
       </div>
-      <div style="width: 50%; text-align: right;" id="wrpasswordd">
-        <input type="password" id="wrpassword" minlength="4" maxlength="13" placeholder="password(null or 4~13)" class="form-control" >
-      </div>
+      
     </div>
     
     <div id="post_result"></div>
-    <div class=form-group style="width:300px;" id="wrbutton">
+    <div class=form-group id="wrbutton">
       <button class="btn btn-primary" id="saveText">Save</button>
       <button class="btn btn-secondary" id="resetText">Reset</button>
     </div>
@@ -146,23 +200,23 @@
 
 
   <div id="Loadtab" class="tabcontent">
-    <div style="width:300px;" class="lwrap">
+    <div class="lwrap">
       <textarea rows="9" cols="75" id="ldtext" class="form-control" maxlength="3000"></textarea>
       <span id="ldcounter" class="text-muted">0/3000</span>
     </div>
 
-    <div class="form-check" style="display: flex; justify-content: space-between;" id="ldinputs">
-      <input type="text" placeholder="code(4)" id="ldcode" class="form-control" minlength="4" maxlength="4" style="width: 120px;">
-      <input type="password" placeholder="password(null or 4~13)" id="ldpassword" class="form-control" style="margin-left: 3px;">
+    <div class="form-check"  id="ldinputs">
+      <input type="text" placeholder="code(4)" id="ldcode" class="form-control" minlength="4" maxlength="4">
+      <input type="password" placeholder="password(null or 4~13)" id="ldpassword" class="form-control">
     </div>
-    <div class="form-check" style="display: flex; justify-content: flex-start;" id="ldbutton">
+    <div class="form-check"  id="ldbutton">
       <button class="btn btn-primary" id="loadText">Load</button>
-      <button class="btn btn-success" id="Newtab" style="margin-left:3px;">Newtab</button>
+      <button class="btn btn-success" id="Newtab">Newtab</button>
     </div>
   </div>
 </div>
 
-  <div style="position:fixed; right:10px; bottom:0px; color:gray; z-index:10;">
+  <div id="footer">
       <p>powered by aps.or.kr</p>
   </div>
 
