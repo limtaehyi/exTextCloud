@@ -24,6 +24,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
         openTab(event, appendname);
     });
 
+    $(document).on('click', '[id^="deltab"]', function(event) {
+        var Delnum = this.id.substring('deltab'.length);
+        deletetab(Delnum);
+    });
+
 
 	document.getElementById('saveText').addEventListener('click', TextSave);
 	document.getElementById('resetText').addEventListener('click', Reset);
@@ -67,7 +72,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
             var state = JSON.parse(localStorage.getItem('state'));
 
             var keys = Object.keys(localStorage); 
-            console.log(keys);
             for(var i = 0; i < keys.length; i++) { 
                 var key = keys[i];
                 
@@ -75,7 +79,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     var newTabData = JSON.parse(localStorage.getItem(key)); 
                     var tabId = key.replace('newtab', '');
                     
-                    $('.tab').append("<button class='tablinks' id='buttontab"+tabId+"'>" + newTabData.buttontab + "</button>");
+                    $('.tab').append("<button class='tablinks' style='position:relative;' id='buttontab"+tabId+"'>" + newTabData.buttontab + "<span id='deltab"+tabId+"' class='close' style='position: absolute;top: 0;right: 0;padding: 0 5px;cursor: pointer;'>&times;</span></button>");
                     
                     $('#contents').append("<div id='newtab" + tabId + "' class='tabcontent'><div style='width:300px;' class='newwrap" + tabId + "'><textarea rows='9' cols='75' id='newtext" + tabId + "' class='form-control' maxlength='3000'>" + newTabData.newtext + "</textarea><span id='newcounter" + tabId + "' class='text-muted'>0/3000</span></div></div>");
                 }
@@ -190,11 +194,11 @@ function Reset()
     $('#wrcounter').html('0/3000');
 }
 
-function deletetab()
+function deletetab(number)
 {
-    var tabName = this.id.substring('buttontab'.length);
-    var delname = 'newtab'+tabName;
-    localStorage.removeItem(delname);
+    $('#buttontab'+number).remove();
+    $('#newtab'+number).remove();
+    localStorage.removeItem("newtab"+number);
 }
 
 function Newtab() 
@@ -202,7 +206,7 @@ function Newtab()
     var ldcode = $('#ldcode').val();
     var ldtext = $('#ldtext').val();
 
-    var newTabButton = $("<button class=\"tablinks\" id=\"buttontab"+tabcounter+"\">"+ldcode+"</button>");
+    var newTabButton = $("<button class=\"tablinks\" style=\"position:relative;\" id=\"buttontab"+tabcounter+"\">"+ldcode+"<span id=\"deltab"+tabcounter+"\" class=\"close\" style=\"position: absolute;top: 0;right: 0;padding: 0 5px;cursor: pointer;\">&times;</span></button>");
 
     newTabButton.on('click', function(event) {
         var tabName = this.id.substring('buttontab'.length);
