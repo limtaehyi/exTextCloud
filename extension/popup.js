@@ -1,4 +1,3 @@
-var tabcounter = 1;
 let lastEvent = null;
 document.addEventListener('DOMContentLoaded', (event) => {
 
@@ -61,6 +60,28 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 activeTab: $('.tablinks.active').attr('id')
             };
             localStorage.setItem('state', JSON.stringify(state));
+
+            var keys = Object.keys(localStorage);
+            for(var i = 0; i < keys.length; i++) 
+            { 
+                var key = keys[i];
+                
+                if(key.startsWith('newtab')) 
+                {
+                    var tabId = key.replace('newtab', '');
+                    var value = JSON.parse(localStorage.getItem(key));
+                    
+                    if(value.hasOwnProperty('newtext')) {
+                        if( $('#newtext'+tabId).val() )
+                        {
+                            value.newtext = $('#newtext'+tabId).val();
+                            localStorage.setItem(key, JSON.stringify(value));
+                        }  
+                    }
+                }
+            }
+
+
             lastEvent = 'blur';
         }
     });
@@ -75,14 +96,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
             for(var i = 0; i < keys.length; i++) { 
                 var key = keys[i];
                 
-                if(key.startsWith('newtab')) { 
-                    var newTabData = JSON.parse(localStorage.getItem(key)); 
+                if(key.startsWith('newtab')) {
                     var tabId = key.replace('newtab', '');
-                    
-                    $('.tab').append("<button class='tablinks' style='position:relative;' id='buttontab"+tabId+"'>" + newTabData.buttontab + "<span id='deltab"+tabId+"' class='close' style='position: absolute;top: 0;right: 0;padding: 0 5px;cursor: pointer;'>&times;</span></button>");
-                    
-                    $('#contents').append("<div id='newtab" + tabId + "' class='tabcontent'><div style='width:300px;' class='newwrap" + tabId + "'><textarea rows='9' cols='75' id='newtext" + tabId + "' class='form-control' maxlength='3000'>" + newTabData.newtext + "</textarea><span id='newcounter" + tabId + "' class='text-muted'>0/3000</span></div></div>");
+                    if(!document.getElementById('newtab'+tabId)) {
+                        var newTabData = JSON.parse(localStorage.getItem(key)); 
+
+                        $('.tab').append("<button class='tablinks' style='position:relative; width:80px;' id='buttontab"+tabId+"'>" + newTabData.buttontab + "<span id='deltab"+tabId+"' class='close' style='position: absolute;top: 0;right: 0;padding: 0 5px;cursor: pointer;'>&times;</span></button>");
+                        $('#contents').append("<div id='newtab" + tabId + "' class='tabcontent'><div style='width:300px;' class='newwrap" + tabId + "'><textarea rows='9' cols='75' id='newtext" + tabId + "' class='form-control' maxlength='3000'>" + newTabData.newtext + "</textarea></div></div>");
+                    }
                 }
+
             }
 
             if (state) 
@@ -117,7 +140,12 @@ function openTab(evt, cityName)
     {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
-    document.getElementById(cityName).style.display = "block";
+
+    if(document.getElementById(cityName))
+    {
+        document.getElementById(cityName).style.display = "block";
+    }
+    
     evt.currentTarget.className += " active";
 }
 
@@ -206,7 +234,21 @@ function Newtab()
     var ldcode = $('#ldcode').val();
     var ldtext = $('#ldtext').val();
 
-    var newTabButton = $("<button class=\"tablinks\" style=\"position:relative;\" id=\"buttontab"+tabcounter+"\">"+ldcode+"<span id=\"deltab"+tabcounter+"\" class=\"close\" style=\"position: absolute;top: 0;right: 0;padding: 0 5px;cursor: pointer;\">&times;</span></button>");
+    let maxNumber = 0; 
+    for (let i = 0; i < localStorage.length; i++) {
+        let key = localStorage.key(i); 
+
+        if (key.startsWith('newtab')) { 
+            let number = parseInt(key.replace('newtab', '')); 
+
+            if (number > maxNumber) { 
+                maxNumber = number; 
+            }
+        }
+    }
+    var tabcounter = maxNumber+1;
+
+    var newTabButton = $("<button class=\"tablinks\" style=\"position:relative; width:80px;\" id=\"buttontab"+tabcounter+"\">"+ldcode+"<span id=\"deltab"+tabcounter+"\" class=\"close\" style=\"position: absolute;top: 0;right: 0;padding: 0 5px;cursor: pointer;\">&times;</span></button>");
 
     newTabButton.on('click', function(event) {
         var tabName = this.id.substring('buttontab'.length);
@@ -214,14 +256,7 @@ function Newtab()
         openTab(event, appendname);
     });
 
-    $('.tab').append(newTabButton);
-
-    $('#contents').append("<div id=\"newtab"+tabcounter+"\" class=\"tabcontent\"><div style=\"width:300px;\" class=\"newwrap"+tabcounter+"\"><textarea rows=\"9\" cols=\"75\" id=\"newtext"+tabcounter+"\" class=\"form-control\" maxlength=\"3000\">"+ldtext+"</textarea><span id=\"newcounter"+tabcounter+"\" class=\"text-muted\">0/3000</span></div></div>");
-
-    var newtab = {
-            buttontab: ldcode,
-            newtext: ldtext,
-    };
+    var newtab = { buttontab:ldcode, newtext:ldtext };
     localStorage.setItem('newtab'+tabcounter, JSON.stringify(newtab));
 
     alert("새 탭에 복사되었습니다.");

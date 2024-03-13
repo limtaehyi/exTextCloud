@@ -173,25 +173,23 @@
   </div>
 
 <div id="contents">
+
   <div id="Savetab" class="tabcontent">
-    <input type="hidden" id="csrf_token1" name="csrf_token1" value="">
+    <input type="hidden" id="csrf_token1" name="csrf_token">
     <div class="wwrap">
       <textarea rows="9" cols="150" id="wrtext" class="form-control" minlength="7" maxlength="3000" ></textarea>
       <span id="wrcounter" class="text-muted">0/3000</span>
     </div>
-
     <div class="form-check" id="wrinputs">
       <div id="wrform">
-        <input type="password" id="wrpassword" minlength="4" maxlength="13" placeholder="password(null or 4~13)" class="form-control" >
+        <input type="password" id="wrpassword" minlength="4" maxlength="13" placeholder="password(null or 4~13)" class="form-control">
       </div>
       <div id="times">
-        <input type='radio' name="wrdelete_at" class="form-check-label" value="10min" checked>10min</label>
-        <input type='radio' name="wrdelete_at" class="form-check-label" value="1h">1h</label>
-        <input type='radio' name="wrdelete_at" class="form-check-label" value="3h">3h</label>
+        <label><input type='radio' name="wrdelete_at" class="form-check-label" value="10min" checked>10min</label>
+        <label><input type='radio' name="wrdelete_at" class="form-check-label" value="1h">1h</label>
+        <label><input type='radio' name="wrdelete_at" class="form-check-label" value="3h">3h</label>
       </div>
-      
     </div>
-    
     <div id="post_result"></div>
     <div class=form-group id="wrbutton">
       <button class="btn btn-primary" id="saveText">Save</button>
@@ -201,7 +199,7 @@
 
 
   <div id="Loadtab" class="tabcontent">
-    <input type="hidden" id="csrf_token2" name="csrf_token2" value="">
+    <input type="hidden" id="csrf_token2" name="csrf_token">
     <div class="lwrap">
       <textarea rows="9" cols="75" id="ldtext" class="form-control" maxlength="3000"></textarea>
       <span id="ldcounter" class="text-muted">0/3000</span>
@@ -216,8 +214,8 @@
       <button class="btn btn-success" id="Newtab">Newtab</button>
     </div>
   </div>
-</div>
 
+</div>
   <div id="footer">
       <p>powered by aps.or.kr</p>
   </div>
