@@ -9,23 +9,27 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	  openTab(event, 'Loadtab');
 	});
 
-    document.querySelectorAll('[id^="buttontab"]').forEach(function(element) {
-        element.addEventListener('click', function(event) {
-            var tabName = element.id.substring('buttontab'.length);
-            var appendname = "newtab"+tabName;
-            openTab(event, appendname);
-        });
-    });
-
     $(document).on('click', '[id^="buttontab"]', function(event) {
         var tabName = this.id.substring('buttontab'.length);
         var appendname = "newtab" + tabName;
         openTab(event, appendname);
     });
 
+    $(document).on('mouseenter', '[id^="buttontab"]', function() {
+        $(this).find(".close").show();
+    }).on('mouseleave', '[id^="buttontab"]', function() {
+        $(this).find(".close").hide();
+    });
+
     $(document).on('click', '[id^="deltab"]', function(event) {
         var Delnum = this.id.substring('deltab'.length);
         deletetab(Delnum);
+    });
+
+    $(document).on('mouseenter', '[id^="deltab"]', function() {
+        $(this).css('color', 'red'); 
+    }).on('mouseleave', '[id^="deltab"]', function() {
+        $(this).css('color', ''); 
     });
 
 
@@ -101,7 +105,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     if(!document.getElementById('newtab'+tabId)) {
                         var newTabData = JSON.parse(localStorage.getItem(key)); 
 
-                        $('.tab').append("<button class='tablinks' style='position:relative; width:80px;' id='buttontab"+tabId+"'>" + newTabData.buttontab + "<span id='deltab"+tabId+"' class='close' style='position: absolute;top: 0;right: 0;padding: 0 5px;cursor: pointer;'>&times;</span></button>");
+                        $('.tab').append("<button class='tablinks' style='position:relative; width:80px; padding-bottom:8px; padding-top:10px; margin-top:10px;' id='buttontab"+tabId+"'>" + newTabData.buttontab + "<span id='deltab"+tabId+"' class='close' style='position: absolute;top: 0;right: 0;padding: 0 5px;cursor: pointer; display:none;'>&times;</span></button>");
                         $('#contents').append("<div id='newtab" + tabId + "' class='tabcontent'><div style='width:300px;' class='newwrap" + tabId + "'><textarea rows='9' cols='75' id='newtext" + tabId + "' class='form-control' maxlength='3000'>" + newTabData.newtext + "</textarea></div></div>");
                     }
                 }
@@ -124,6 +128,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
 
     });
+
+
+
 });
 
 
@@ -164,7 +171,7 @@ function TextSave()
     else
     {
         $.ajax({
-            url: 'http://127.0.0.1:5000/write/',
+            url: 'http://aps.or.kr:8056/write/',
             type: 'POST',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
@@ -194,7 +201,7 @@ function TextLoad()
     var ldcode = $('#ldcode').val();
     var ldpassword = $('#ldpassword').val();
     $.ajax({
-        url: 'http://127.0.0.1:5000/load/',
+        url: 'http://aps.or.kr:8056/load/',
         type: 'POST',
         dataType: 'json',
         contentType: 'application/json; charset=utf-8',
@@ -219,6 +226,7 @@ function TextLoad()
 function Reset()
 {
     $('#wrtext').val('');
+    $('#wrpassword').val('');
     $('#wrcounter').html('0/3000');
 }
 
@@ -248,7 +256,7 @@ function Newtab()
     }
     var tabcounter = maxNumber+1;
 
-    var newTabButton = $("<button class=\"tablinks\" style=\"position:relative; width:80px;\" id=\"buttontab"+tabcounter+"\">"+ldcode+"<span id=\"deltab"+tabcounter+"\" class=\"close\" style=\"position: absolute;top: 0;right: 0;padding: 0 5px;cursor: pointer;\">&times;</span></button>");
+    var newTabButton = $("<button class='tablinks' style='position:relative; width:80px; padding-bottom:8px; padding-top:10px; margin-top:10px;' id='buttontab"+tabcounter+"'>"+ldcode+"<span id='deltab"+tabcounter+"' class='close' style='position: absolute;top: 0;right: 0;padding: 0 5px;cursor: pointer; display:none;'>&times;</span></button>");
 
     newTabButton.on('click', function(event) {
         var tabName = this.id.substring('buttontab'.length);
@@ -259,6 +267,6 @@ function Newtab()
     var newtab = { buttontab:ldcode, newtext:ldtext };
     localStorage.setItem('newtab'+tabcounter, JSON.stringify(newtab));
 
-    alert("새 탭에 복사되었습니다.");
+    alert("현재 탭이 새 탭에 복사되었습니다.");
     tabcounter = tabcounter + 1;
 }
