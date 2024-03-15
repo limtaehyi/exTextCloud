@@ -1,6 +1,6 @@
-#exTextCloud (extension or extend Text Cloud)
+# exTextCloud (extension or extend Text Cloud)
 
-##no login text save cloud
+## no login text save cloud
 
 
 *PURPOSE of creation*  
