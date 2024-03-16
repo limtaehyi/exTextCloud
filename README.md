@@ -7,7 +7,7 @@
 `for me : experience to make chrome extension`<br>
 `for people : Customers who want to simply send a message(text) for other PC that has no point of contact`  
 
-!['로고'](screenshot_save.png)
-!['로고'](screenshot_load.png)
+<img src="screenshot_save.png" width="40%" height="40%">
+<img src="screenshot_load.png" width="40%" height="40%">
 
 powered by aps.or.kr:8056(vmware esxi)
