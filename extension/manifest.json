@@ -8,12 +8,6 @@
   },
   
   "content_scripts": [
-    {
-      "matches": ["http://127.0.0.1:5000/*"],
-      "css": ["static/bootstrap.min.css"],
-      "js": ["static/jquery.min.js", "static/bootstrap.bundle.min.js"],
-      "run_at": "document_end"
-    }
   ],
 
   "action": {
