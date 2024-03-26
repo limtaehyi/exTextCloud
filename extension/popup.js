@@ -171,7 +171,7 @@ function TextSave()
     else
     {
         $.ajax({
-            url: 'http://aps.or.kr:8056/write/',
+            url: 'https://aps.or.kr:8056/write/',
             type: 'POST',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
@@ -201,7 +201,7 @@ function TextLoad()
     var ldcode = $('#ldcode').val();
     var ldpassword = $('#ldpassword').val();
     $.ajax({
-        url: 'http://aps.or.kr:8056/load/',
+        url: 'https://aps.or.kr:8056/load/',
         type: 'POST',
         dataType: 'json',
         contentType: 'application/json; charset=utf-8',
