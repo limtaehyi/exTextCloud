@@ -1,7 +1,7 @@
 # exTextCloud (extension Text Cloud)
 
 ## no login text save cloud
-https://chromewebstore.google.com/detail/gpignojchpllcdgjpgmlkfacghlhedjg?hl=ko&authuser=0 (only url)
+[https://chromewebstore.google.com/detail/gpignojchpllcdgjpgmlkfacghlhedjg?hl=ko&authuser=0 ](https://chromewebstore.google.com/detail/extextcloud/gpignojchpllcdgjpgmlkfacghlhedjg)
 
 *PURPOSE of creation*  
 `for me : experience to make chrome extension`<br>
