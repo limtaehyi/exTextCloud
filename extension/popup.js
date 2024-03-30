@@ -8,12 +8,31 @@ document.addEventListener('DOMContentLoaded', (event) => {
 	document.getElementById('loadTab').addEventListener('click', function(event) {
 	  openTab(event, 'Loadtab');
 	});
+    
+    document.getElementById('kebab-button').addEventListener('click', function() {
+        var dropdowns = document.getElementById('dropdowns');
+        dropdowns.style.display = dropdowns.style.display === 'block' ? 'none' : 'block';
+    });
+
+    document.getElementById('trashcan').addEventListener('click', function(event) {
+      deletehistory();
+    });
+
+    $(document).ajaxStart(function(){
+        $("#loading").show();
+      });
+
+      $(document).ajaxStop(function(){
+        $("#loading").hide();
+      });
 
     $(document).on('click', '[id^="buttontab"]', function(event) {
         var tabName = this.id.substring('buttontab'.length);
         var appendname = "newtab" + tabName;
         openTab(event, appendname);
     });
+
+
 
     $(document).on('mouseenter', '[id^="buttontab"]', function() {
         $(this).find(".close").show();
@@ -34,8 +53,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 
 	document.getElementById('saveText').addEventListener('click', TextSave);
-	document.getElementById('resetText').addEventListener('click', Reset);
+	document.getElementById('wrresetText').addEventListener('click', WRReset);
 	document.getElementById('loadText').addEventListener('click', TextLoad);
+    document.getElementById('ldresetText').addEventListener('click', LDReset);
     document.getElementById('Newtab').addEventListener('click', Newtab);
 
 	$(document).on("keyup", "#wrtext", function(e) 
@@ -65,6 +85,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
             };
             localStorage.setItem('state', JSON.stringify(state));
 
+            var savehistory = {};
+            $('#save-dropdown p').each(function(index) {
+                savehistory[index] = $(this).text();
+            });
+
+            var loadhistory = {};
+            $('#load-dropdown p').each(function(index) {
+                loadhistory[index] = $(this).text();
+            });
+
+            localStorage.setItem('savehistory', JSON.stringify(savehistory));
+            localStorage.setItem('loadhistory', JSON.stringify(loadhistory));
+
             var keys = Object.keys(localStorage);
             for(var i = 0; i < keys.length; i++) 
             { 
@@ -90,11 +123,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     });
 
+
     window.addEventListener('focus', function() 
     {
         if(lastEvent !== 'focus')
         {
             var state = JSON.parse(localStorage.getItem('state'));
+            var saveData = JSON.parse(localStorage.getItem('savehistory'));
+            var loadData = JSON.parse(localStorage.getItem('loadhistory'));
 
             var keys = Object.keys(localStorage); 
             for(var i = 0; i < keys.length; i++) { 
@@ -124,13 +160,37 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     document.getElementById(state.activeTab).click();
                 }
             }
+            
+            $('#save-dropdown').empty();
+            $('#load-dropdown').empty();
+            $('#save-dropdown').append('<h6 style="text-align:center; background-color:#ddd; margin:0; padding-top: 10px;padding-bottom: 10px;">Save History</h6>');
+            $('#load-dropdown').append('<h6 style="text-align:center; background-color:#ddd; margin:0; padding-top: 10px;padding-bottom: 10px;">Load History</h6>');
+
+            if(saveData) {
+                Object.values(saveData).forEach(function(item) {
+                    $('#save-dropdown').append('<p>' + item + '</p>');
+                });
+            }
+            if(loadData) {
+                Object.values(loadData).forEach(function(item) {
+                    $('#load-dropdown').append('<p>' + item + '</p>');
+                });
+            }
+
             lastEvent = 'focus';
         }
 
     });
 
-
-
+    
+    window.addEventListener('click', function(e) {
+        if (!e.target.matches('.kebab-button')) {
+          if (document.getElementById('dropdowns').style.display === 'block') {
+            document.getElementById('dropdowns').style.display = 'none';
+          }
+        }
+    });
+    
 });
 
 
@@ -165,7 +225,7 @@ function TextSave()
 
     if (wrtext.length < 7)
     {
-        alert("최소 7글자는 넣어야합니다.");
+        alert("You must enter at least 7 characters.");
         return;
     }
     else
@@ -182,14 +242,18 @@ function TextSave()
                 copyText.append(messageText);
                 messageText.click(function() {
                     window.navigator.clipboard.writeText(response.message).then(function() {
-                        alert('복사되었습니다!!');
+                        alert('It has been copied to the clipboard!!');
                     });
                 });
                 $('#post_result').append(copyText);
+
+                var savehistory = $('<p>', { text: response.message });
+                $('#save-dropdown').append(savehistory);
             },
 
             error: function(error) {
-                console.log(error);
+                alert("Wrong request or Server error");
+                return;
             }
         });
     }
@@ -214,20 +278,29 @@ function TextLoad()
             else if(response.status == 'success')
             {
                 $('#ldtext').val(response.message);
+
+                var loadhistory = $('<p>', { text: ldcode });
+                $('#load-dropdown').append(loadhistory);
             }
         },
         error: function(error) {
-            alert(2);
-            console.log(error);
+            alert("Wrong request or Server error");
         }
     });
 }
 
-function Reset()
+function WRReset()
 {
     $('#wrtext').val('');
     $('#wrpassword').val('');
     $('#wrcounter').html('0/3000');
+}
+
+function LDReset()
+{
+    $('#ldtext').val('');
+    $('#ldpassword').val('');
+    $('#ldcounter').html('0/3000');
 }
 
 function deletetab(number)
@@ -237,10 +310,23 @@ function deletetab(number)
     localStorage.removeItem("newtab"+number);
 }
 
-function Newtab() 
+function Newtab()
 {
     var ldcode = $('#ldcode').val();
     var ldtext = $('#ldtext').val();
+
+    if(ldcode == "" || ldcode == " ")
+    {
+        var element = document.getElementById('ldcode');
+        element.style.boxShadow = "inset 0 0 0 2px red";
+        
+        setTimeout(function() {
+            element.style.transition = "box-shadow 2s";
+            element.style.boxShadow = "inset 0 0 0 0px white";
+        }, 3000);
+        alert("The code field cannot be blank or contain spaces.");
+        return;
+    }
 
     let maxNumber = 0; 
     for (let i = 0; i < localStorage.length; i++) {
@@ -267,6 +353,15 @@ function Newtab()
     var newtab = { buttontab:ldcode, newtext:ldtext };
     localStorage.setItem('newtab'+tabcounter, JSON.stringify(newtab));
 
-    alert("현재 탭이 새 탭에 복사되었습니다.");
+    alert("The current tab has been copied to a new tab.");
     tabcounter = tabcounter + 1;
+}
+
+function deletehistory()
+{
+    if(confirm("Delete history?"))
+    {
+        document.getElementById('save-dropdown').innerHTML = '';
+        document.getElementById('load-dropdown').innerHTML = '';
+    }
 }

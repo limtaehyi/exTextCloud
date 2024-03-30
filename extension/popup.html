@@ -12,154 +12,216 @@
 
 
 <style>
-    body {
-        font-family: Arial;
-        background-color: #9dd6fff7;
-    }
+  body {
+    font-family: Arial;
+    background-color: #9dd6ff;
+  }
 
-    .tab {
-      overflow: hidden;
-      border: 1px solid #ccc;
-      background-color: white;
-    }
+  .tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: white;
+  }
 
-    .tab button {
-      background-color: #e7e7e7;
-      float: left;
-      border: none;
-      outline: none;
-      cursor: pointer;
-      padding: 14px 16px;
-      transition: 0.3s;
-      font-size: 17px;
-    }
+  .tab button {
+    background-color: #e7e7e7;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+  }
 
-    .tab button:hover {
-      background-color: #ddd;
-    }
+  .tab button:hover {
+    background-color: #ddd;
+  }
 
-    .tab button.active {
-      background-color: #ccc;
-    }
+  .tab button.active {
+    background-color: #ccc;
+  }
 
-    .tabcontent {
-      display: none;
-      padding: 6px 12px;
-      
-      border-top: none;
-    }
+  .kebab-menu {
+    position: relative;
+    display: inline-block;
+    float: right;
+  }
 
-    .wwrap, .lwrap {
-        position: relative;
-        display: inline-block;
-    }
-    .wwrap textarea, .lwrap textarea{
-        resize: none;
-        min-width: 300px;
-        width: 575px;
-        max-width: 600px;
-        min-height: 18.6em;
-        line-height:1.6em;
-        max-height: 19em;
-    }
+  .kebab-button{
+    width: 16px;
+    height: 16px;
+    cursor:pointer;
+  }
 
-    .wwrap{
-      width:300px;
-    }
+  .dropdowns
+  {
+    background-color: white;
+    z-index: 1000;
+    display: none;
+    position: fixed;
+    right: 8px;
+    border: 1px solid #ddd;
+  }
+  
+  .trashcan{
+    width:24px;
+    height: 24px;
+  }
 
-    .lwrap{
-      width:300px;
-    }
+  .dropdivs{
+    display:flex;
+    overflow-y: auto;
+    max-height: 300px;
+  }
 
-    [id^="newtext"]{
-        resize: none;
-        min-width: 300px;
-        width: 575px;
-        max-width: 600px;
-        min-height: 18.6em;
-        line-height:1.6em;
-        max-height: 19em;
-    }
+  .save-dropdown {
+    background-color: #f9f9f9;
+    min-width: 100px;
+    top: 30px;
+    right: 110px;
+  }
 
-    .wwrap span, .lwrap span{
-        position: absolute;
-        bottom: 5px;
-        right: -250px;
-    }
+  .load-dropdown {
+    background-color: #f9f9f9;
+    min-width: 100px;
+    top: 30px;
+    right: 10px;
+  }
 
-    [id^="newcounter"] span {
-        position: absolute;
-        bottom: 5px;
-        right: -250px;
-    }
+  .load-dropdown p, .save-dropdown p{
+    text-align: center;
+    margin:0;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border: 1px solid #ddd;
+  }
 
-    #wrcounter, #ldcounter {
-      padding: 0 .5em 0 .5em;
-      font-size: 0.75em;
-    }
+  .tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border-top: none;
+  }
 
-    #wrinputs {
-      padding-left: 0px;
-      display: flex; 
-      justify-content: space-between;
-    }
+  #loading {
+    display: none;
+  }
 
-    #ldinputs{
-      display: flex; 
-      justify-content: space-between;
-    }
+  .wwrap, .lwrap {
+    position: relative;
+    display: inline-block;
+  }
+  .wwrap textarea, .lwrap textarea{
+    resize: none;
+    min-width: 300px;
+    width: 575px;
+    max-width: 600px;
+    min-height: 18.6em;
+    line-height:1.6em;
+    max-height: 19em;
+  }
 
-    #ldinputs, #ldbutton {
-      padding-left: 0px;
-      width:75%;
-    }
+  .wwrap{
+    width:300px;
+  }
 
-    #wrbutton, #ldbutton {
-      margin-top: 7px;
-      margin-bottom: 5px;
-    }
+  .lwrap{
+    width:300px;
+  }
 
-    #wrbutton{
-      width:300px;
-    }
+  [id^="newtext"]{
+    resize: none;
+    min-width: 300px;
+    width: 575px;
+    max-width: 600px;
+    min-height: 18.6em;
+    line-height:1.6em;
+    max-height: 19em;
+  }
 
-    #ldbutton{
-      display: flex; 
-      justify-content: flex-start;
-    }
+  .wwrap span, .lwrap span{
+    position: absolute;
+    bottom: 5px;
+    right: -250px;
+  }
 
-    #ldcode{
-      width: 120px;
-    }
+  [id^="newcounter"] span {
+    position: absolute;
+    bottom: 5px;
+    right: -250px;
+  }
 
-    #ldpassword{
-      margin-left: 3px;
-    }
+  #wrcounter, #ldcounter {
+    padding: 0 .5em 0 .5em;
+    font-size: 0.75em;
+  }
 
-    #wrform {
-      width:75%;
-      width: 50%; 
-      text-align: right;
-    }
+  #wrinputs {
+    padding-left: 0px;
+    display: flex; 
+  }
 
-    #times{
-      width: 50%; 
-      text-align:right; 
-      margin-right:50px; 
-      margin-top:5px;
-    }
+  #ldinputs{
+    display: flex; 
+    justify-content: space-between;
+  }
 
-    #Newtab {
-      margin-left:3px;
-    }
+  #ldinputs, #ldbutton {
+    padding-left: 0px;
+    width:75%;
+  }
 
-    #footer{
-      position:fixed; 
-      right:10px;
-      bottom:0px;
-      color:gray;
-      z-index:10;
-    }
+  #wrbutton, #ldbutton {
+    margin-top: 7px;
+    margin-bottom: 5px;
+  }
+
+  #wrbutton{
+    width:300px;
+  }
+
+  #ldbutton{
+    display: flex; 
+    justify-content: flex-start;
+  }
+
+  #ldcode{
+    width: 120px;
+  }
+
+  #ldpassword{
+    margin-left: 3px;
+  }
+
+  #wrform {
+    width:75%;
+    width: 50%; 
+    text-align: right;
+    padding-right: 3px;
+  }
+
+  #times{
+    width: 120px; 
+    text-align:right; 
+    margin:0;
+    margin-bottom: 0 !important;
+  }
+
+  #ldresetText{
+    margin-left:3px;
+  }
+
+  #Newtab {
+    margin-left:3px;
+  }
+
+  #footer{
+    position:fixed; 
+    right:10px;
+    bottom:0px;
+    color:gray;
+    z-index:10;
+  }
 
 </style>
 
@@ -168,11 +230,22 @@
   <div class="tab">
     <button class="tablinks" id="saveTab">Save</button>
     <button class="tablinks" id="loadTab">Load</button>
+    <div class="kebab-menu" id="kebab-menu">
+    <img class="kebab-button" id="kebab-button" src="img/kebob.png">
+      <div class="dropdowns" id="dropdowns">
+        <img src="img/trashcan.png" class="trashcan" id="trashcan">
+        <div class="dropdivs" id="dropdivs">
+          <div class="save-dropdown" id="save-dropdown">
+          </div>
+          <div class="load-dropdown" id="load-dropdown">
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
 <div id="contents">
   <div id="Savetab" class="tabcontent">
-    <input type="hidden" id="csrf_token1" name="csrf_token1" value="">
     <div class="wwrap">
       <textarea rows="9" cols="150" id="wrtext" class="form-control" minlength="7" maxlength="3000" ></textarea>
       <span id="wrcounter" class="text-muted">0/3000</span>
@@ -182,24 +255,26 @@
       <div id="wrform">
         <input type="password" id="wrpassword" minlength="4" maxlength="13" placeholder="password(null or 4~13)" class="form-control" >
       </div>
-      <div id="times">
-        <input type='radio' name="wrdelete_at" class="form-check-label" value="10min" checked>10min</label>
-        <input type='radio' name="wrdelete_at" class="form-check-label" value="1h">1h</label>
-        <input type='radio' name="wrdelete_at" class="form-check-label" value="3h">3h</label>
+      <div id="times" class="mb-3">
+        <select name="wrdelete_at" class="form-control">
+          <option value="10min" selected>10min</option>
+          <option value="1h">1h</option>
+          <option value="3h">3h</option>
+        </select>
       </div>
-      
     </div>
     
-    <div id="post_result"></div>
+    <div id="post_result">
+      <img src="img/loading48.gif" id="loading">
+    </div>
     <div class=form-group id="wrbutton">
       <button class="btn btn-primary" id="saveText">Save</button>
-      <button class="btn btn-secondary" id="resetText">Reset</button>
+      <button class="btn btn-secondary" id="wrresetText">Reset</button>
     </div>
   </div>
 
 
   <div id="Loadtab" class="tabcontent">
-    <input type="hidden" id="csrf_token2" name="csrf_token2" value="">
     <div class="lwrap">
       <textarea rows="9" cols="75" id="ldtext" class="form-control" maxlength="3000"></textarea>
       <span id="ldcounter" class="text-muted">0/3000</span>
@@ -211,6 +286,7 @@
     </div>
     <div class="form-check"  id="ldbutton">
       <button class="btn btn-primary" id="loadText">Load</button>
+      <button class="btn btn-secondary" id="ldresetText">Reset</button>
       <button class="btn btn-success" id="Newtab">Newtab</button>
     </div>
   </div>
