@@ -231,7 +231,7 @@ function TextSave()
     else
     {
         $.ajax({
-            url: 'https://aps.or.kr:8056/write/',
+            url: 'https://www.extextcloud.com/write/',
             type: 'POST',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
@@ -265,7 +265,7 @@ function TextLoad()
     var ldcode = $('#ldcode').val();
     var ldpassword = $('#ldpassword').val();
     $.ajax({
-        url: 'https://aps.or.kr:8056/load/',
+        url: 'https://www.extextcloud.com/load/',
         type: 'POST',
         dataType: 'json',
         contentType: 'application/json; charset=utf-8',
