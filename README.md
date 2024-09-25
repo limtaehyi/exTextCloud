@@ -9,4 +9,4 @@
 
 <img src="screenshot_save.png" width="40%" height="40%">  <img src="screenshot_load.png" width="40%" height="40%">
 
-powered by aps.or.kr(vmware esxi)
+powered by extextcloud.com (aws)
