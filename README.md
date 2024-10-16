@@ -1,7 +1,7 @@
 # <del>exTextCloud (extension Text Cloud)</del> dead 🤪
 
 ## no login text save cloud
-<del>https://chromewebstore.google.com/detail/extextcloud/gpignojchpllcdgjpgmlkfacghlhedjg</del>
+<del>https://chromewebstore.google.com/detail/extextcloud/gpignojchpllcdgjpgmlkfacghlhedj</del>
 
 *PURPOSE of creation*  
 `for me : experience to make chrome extension`<br>
