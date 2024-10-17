@@ -1,7 +1,7 @@
-# exTextCloud (extension Text Cloud)
+# <del>exTextCloud (extension Text Cloud)</del> dead 🤪
 
 ## no login text save cloud
-[https://chromewebstore.google.com/detail/gpignojchpllcdgjpgmlkfacghlhedjg?hl=ko&authuser=0 ](https://chromewebstore.google.com/detail/extextcloud/gpignojchpllcdgjpgmlkfacghlhedjg)
+<del>https://chromewebstore.google.com/detail/extextcloud/gpignojchpllcdgjpgmlkfacghlhedj</del>
 
 *PURPOSE of creation*  
 `for me : experience to make chrome extension`<br>
@@ -9,4 +9,4 @@
 
 <img src="screenshot_save.png" width="40%" height="40%">  <img src="screenshot_load.png" width="40%" height="40%">
 
-powered by aps.or.kr(vmware esxi)
+powered by extextcloud.com (aws)
