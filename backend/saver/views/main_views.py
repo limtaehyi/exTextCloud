@@ -10,10 +10,19 @@ from .. import db
 from ..forms import WriteText, LoadText
 from ..models import TextTable, CodeTable
 
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
 bp = Blueprint('main', __name__, url_prefix='/')
 
+class MockApp: 
+    def __init__(self):
+        self.config = {'LIMITER_STORAGE_URI': 'memory://'} 
+mock_app = MockApp()
+limiter = Limiter(app=mock_app, key_func=get_remote_address)
 
 @bp.route('/')
+@limiter.limit("5 per minute")
 def index():
     form1 = WriteText()
     form2 = LoadText()
@@ -22,6 +31,7 @@ def index():
 
 
 @bp.route('/write/', methods=('GET', 'POST'))
+@limiter.limit("10 per minute")
 def write():
     form = WriteText()
     data = request.get_json()
@@ -49,6 +59,7 @@ def write():
     
 
 @bp.route('/load/', methods=['GET', 'POST'])
+@limiter.limit("10 per minute")
 def load():
     form = LoadText()
     data = request.get_json()
@@ -65,13 +76,3 @@ def load():
                 return jsonify({'status': 'error','message': 'pw not match'})
     else:
         return jsonify({'status': 'error','message': 'not exist'})
-
-'''
-def delete_old_data():
-    old_data = YourModel.query.filter(YourModel.created_at <= datetime.now() - timedelta(hours=1)).all()
-
-    for data in old_data:
-        db.session.delete(data)
-
-    db.session.commit()
-    '''
