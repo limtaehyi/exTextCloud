@@ -15,14 +15,14 @@ from flask_limiter.util import get_remote_address
 
 bp = Blueprint('main', __name__, url_prefix='/')
 
-class MockApp: 
+'''class MockApp: 
     def __init__(self):
         self.config = {'LIMITER_STORAGE_URI': 'memory://'} 
 mock_app = MockApp()
 limiter = Limiter(app=mock_app, key_func=get_remote_address)
-
+'''
 @bp.route('/')
-@limiter.limit("5 per minute")
+#@limiter.limit("5 per minute")
 def index():
     form1 = WriteText()
     form2 = LoadText()
@@ -31,15 +31,19 @@ def index():
 
 
 @bp.route('/write/', methods=('GET', 'POST'))
-@limiter.limit("10 per minute")
+#@limiter.limit("10 per minute")
 def write():
-    form = WriteText()
     data = request.get_json()
-    if form.wrdelete_at.data == "10min":
+
+    wrtext = data['wrtext']
+    wrpassword = data['wrpassword']
+    wrdelete_at = data['wrdelete_at']
+
+    if wrdelete_at == "10min":
         deltime = datetime.now() + timedelta(minutes=10)
-    elif form.wrdelete_at.data == "1h":
+    elif wrdelete_at == "1h":
         deltime = datetime.now() + timedelta(hours=1)
-    elif form.wrdelete_at.data == "3h":
+    elif wrdelete_at == "3h":
         deltime = datetime.now() + timedelta(hours=3)
     else:
         deltime = datetime.now() + timedelta(minutes=10)
@@ -48,29 +52,30 @@ def write():
     db.session.delete(randomrow)
 
 
-    if form.wrpassword.data:
-        query = TextTable(code=randomrow.codes, text=form.wrtext.data, password=generate_password_hash(form.wrpassword.data), created_on=datetime.now(), delete_at=deltime)
+    if wrpassword:
+        query = TextTable(code=randomrow.codes, text=wrtext, password=generate_password_hash(wrpassword), created_on=datetime.now(), delete_at=deltime)
     else:
-        query = TextTable(code=randomrow.codes, text=form.wrtext.data, created_on=datetime.now(), delete_at=deltime)
+        query = TextTable(code=randomrow.codes, text=wrtext, created_on=datetime.now(), delete_at=deltime)
 
     db.session.add(query)
     db.session.commit()
     return jsonify({'status': 'success','message': randomrow.codes})
-    
+
 
 @bp.route('/load/', methods=['GET', 'POST'])
-@limiter.limit("10 per minute")
+#@limiter.limit("10 per minute")
 def load():
-    form = LoadText()
     data = request.get_json()
+    ldpassword = data['ldpassword']
+    ldcode = data['ldcode']
 
-    ischeck = TextTable.query.filter_by(code=form.ldcode.data).first()
+    ischeck = TextTable.query.filter_by(code=ldcode).first()
 
     if ischeck:
         if ischeck.password == None:
             return jsonify({'status': 'success','message': ischeck.text})
         else:
-            if check_password_hash(ischeck.password, form.ldpassword.data):
+            if check_password_hash(ischeck.password, ldpassword):
                 return jsonify({'status': 'success','message': ischeck.text})
             else:
                 return jsonify({'status': 'error','message': 'pw not match'})

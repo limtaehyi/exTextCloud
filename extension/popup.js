@@ -221,7 +221,7 @@ function TextSave()
 {
     var wrtext = $('#wrtext').val();
     var wrpassword = $('#wrpassword').val();
-    var wrdelete_at = $('input[name="wrdelete_at"]:checked').val();
+    var wrdelete_at = $('select[name="wrdelete_at"]').val();
 
     if (wrtext.length < 7)
     {
